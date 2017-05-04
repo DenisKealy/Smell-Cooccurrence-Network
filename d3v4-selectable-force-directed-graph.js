@@ -264,8 +264,8 @@ function createV4SelectableForceDirectedGraph(svg, graph) {
         .data(texts)
         .enter()
         .append('text')
-        .attr('x', 800)
-        .attr('y', function(d,i) { return 370 + i * 18; })
+        .attr('x', 900)
+        .attr('y', function(d,i) { return 470 + i * 18; })
         .text(function(d) { return d; });
 
     return graph;
