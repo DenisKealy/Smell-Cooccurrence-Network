@@ -1,31 +1,15 @@
-A detailed description of this example can be found at <a href="http://emptypipes.org/2017/04/29/d3v4-selectable-zoomable-force-directed-graph/">emptypipes.org/2017/04/29/d3v4-selectable-zoomable-force-directed-graph/</a>.
+This is a visualization of a co-occurrance network for smell percepts. The data was scraped from flavornet.org. For every molecule in the database there was a list of percieved smells. e.g = {honey, spice, rose, lilac}
 
 In summary:
 
-1. Clicking on a node selects it and de-selects everything else.
-2. Shift-clicking on a node toggles its selection status and leaves
-   all other nodes as they are.
-3. Shift-dragging toggles the selection status of all nodes within
-   the selection area.
-4. Dragging on a selected node drags all selected nodes.
-5. Dragging an unselected node selects and drags it while
-   de-selecting everything else.
+1. I scraped the data from flavornet.org using the scrapy libray and some python spiders. My spiders outputted a JSON file which has to be transformed to work with this visualisation.
+2. Before transforming the data I performed data exploration to discover the properties such as how many unique mappings there were, how many duplicate. Discovering the number of unique percepts. Get a count of the frequency of each perceptual descriptor.
+3. I then wrote a python class to transform the data into a JSON file that this program could read to construct a co-occurrance graph. Molecules with only a single percieved scent were ignored, apart from when counting the overall frequency (for weighted node sizes). All molecules with 2 percieved scents were used to create a mapping. 
+4. Molecules which registered 2-4 percepts were considered and converted into binary groups of co-occurrance with each mapping only being added once. A frequency of each scent co-occurrence was stored and used to calculate the weighted links between the nodes.
+5. In summary, each node is a smell. Each link is a co-occurrance of the two connected smells. The width and length of the link is proportional to the frequency of the co-occurrance in our dataset.
 
-Upgrading selectable zoomable force directed graph implementation to D3 v4 required
-a few minor and not-so-minor changes.
+Playing with the visualisation:
 
-* The new brush in v4 captures the shift, alt and meta keys to perform some
-  actions by default. To get around this, I forked `d3-brush` and modified it
-  so that it doesn't capture the shift events. The new version (d3-brush-lite)
-  can be found [on github](https://github.com/pkerpedjiev/d3-brush-lite). There
-  is an [open github issue](https://github.com/d3/d3-brush/issues/20) to
-  disable this behavior in `d3-brush`.
-* Because the d3-drag behavior consumes all events in v4, it is no longer
-  necessary to stop propagation.
-* The brush creates its own overlay which catches all events meaning that we
-  don't need to turn the zoom behavior off when the shift key is pressed.
-* Whether a node is fixed is specified by the `.fx` and `.fy` parameters. This
-  eliminates the need to set the `.fixed` parameter on each node.
-* The force layout in v4 lets us specify an [accessor for the nodes that a link
-  connects](https://github.com/d3/d3-force#link_id). This lets us use ids for 
-  a link's endpoint and makes the graph specification JSON easier to read:
+* Hover over a node to see which smell it is
+* Pull a node away from the cluster to see which nodes it drags along with it
+* The connected nodes distance from the selected node is a measure of how often those smells occurred from the same stimulus.
