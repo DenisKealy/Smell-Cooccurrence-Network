@@ -70,7 +70,7 @@ function createV4SelectableForceDirectedGraph(svg, graph) {
         .data(graph.nodes)
         .enter().append("circle")
         .attr("r", function(d) { 
-                return Math.sqrt(d.freq*10); 
+                return Math.sqrt(d.freq*3.14);
         })
         .attr("fill", function(d) { 
             if ('color' in d)
